@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qmentr Aptitude Test</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for animated graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Custom CSS and fonts -->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@400;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden; /* Prevents horizontal scrolling */
+      }
+
+      #app {
+        height: 95vh;
+        overflow-y: auto; /* Allows content to scroll vertically if it exceeds container height */
+      }
+
+      /* Custom animation for button click */
+      .option-button.clicked {
+        background-color: #22c55e;
+        transform: scale(1.05);
+        transition: transform 0.2s, background-color 0.2s;
+        color: white;
+      }
+
+      /* Custom bar chart styles for the report */
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+
+      /* Fade-in animation for encouraging messages */
+      .encouraging-message {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Report animations */
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .report-section {
+        animation: slideInUp 0.8s ease-out;
+      }
+
+      /* Gamified Progress Bar */
+      .progress-bar-container {
+        height: 10px;
+        background-color: #e5e7eb;
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: #4f46e5;
+        transition: width 0.4s ease-in-out;
+        border-radius: 9999px;
+      }
+
+      .go-back-button {
+        transition: transform 0.2s ease-in-out, background-color 0.2s;
+      }
+      .go-back-button:hover {
+        transform: scale(1.05);
+      }
+      .prominent-heading {
+        font-family: "Montserrat", sans-serif;
+      }
+      .mobile-prominent-contact {
+        display: block;
+      }
+      /* Mobile optimization for data collection form */
+      @media (max-width: 640px) {
+        #data-collection-section input[type="tel"] {
+          flex: 1;
+        }
+        #data-collection-section select {
+          width: auto;
+          flex-shrink: 0;
+        }
+      }
+    </style>
+  </head>
+  <script type="module" src="script.js"></script>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <!-- Main Container -->
+    <div
+      id="app"
+      class="bg-white rounded-3xl shadow-xl w-full max-w-2xl p-6 md:p-10 transition-all duration-300"
+    >
+      <!-- Homepage Section (New) -->
+      <div
+        id="homepage-section"
+        class="flex flex-col md:flex-row gap-8 items-stretch h-full"
+      >
+        <div class="flex-1 flex flex-col justify-between">
+          <div>
+            <h1
+              class="text-3xl font-bold text-indigo-600 mb-2 prominent-heading"
+            >
+              Qmentr
+            </h1>
+            <p class="text-xl font-semibold text-gray-800">
+              Quality Mentoring for a Quality Future.
+            </p>
+          </div>
+          <div class="mt-8 md:mt-0">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 prominent-heading">
+              Learn From The Experienced
+            </h2>
+            <p class="text-gray-600 mb-4">
+              We connect you with top experts who know the way forward. Learn
+              from their experience to make smarter decisions, avoid pitfalls,
+              and build the future you deserve.
+            </p>
+            <p class="text-gray-600">
+              Forget the miles, forget the wait. We collapse the distance
+              between you and a Titan of industry.
+            </p>
+          </div>
+          <div class="flex flex-col gap-4 mt-8">
+            <!-- Placeholder for future sections -->
+          </div>
+        </div>
+        <div
+          class="flex-1 flex flex-col justify-center items-center text-center"
+        >
+          <div
+            class="bg-indigo-50 p-6 md:p-10 rounded-xl shadow-inner border-2 border-indigo-200"
+          >
+            <h3
+              class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 prominent-heading"
+            >
+              Test Yourself
+            </h3>
+            <p class="text-lg text-gray-600 mb-6">Fix your career.</p>
+            <button
+              id="start-test-button"
+              class="bg-indigo-600 text-white font-semibold py-4 px-10 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+            >
+              Aptitude Test
+            </button>
+          </div>
+          <!-- Prominent WhatsApp and Call contact section -->
+          <div
+            class="mt-8 bg-green-50 rounded-xl p-6 border border-green-200 w-full mobile-prominent-contact"
+          >
+            <p class="text-gray-800 text-lg font-bold mb-2 prominent-heading">
+              Connect with Qmentr
+            </p>
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4"
+            >
+              <a
+                href="https://wa.me/919947800100?text=I%20want%20to%20Conncet%20with%20my%20Qmentr"
+                class="bg-green-500 text-white font-bold py-3 px-6 rounded-full inline-flex items-center hover:bg-green-600 transition-colors w-full sm:w-auto justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12.04 2.1c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.35 4.96l-1.4 5.16 5.34-1.39c1.45.8 3.1 1.25 4.8 1.25 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.04c-1.57 0-3.1-.47-4.42-1.3l-3.11.81.81-3.08c-.88-1.38-1.34-2.95-1.34-4.59 0-4.54 3.7-8.24 8.24-8.24s8.24 3.7 8.24 8.24-3.7 8.24-8.24 8.24zm3.92-5.91c-.22-.11-1.3-.64-1.5-1.04-.2-.4-.75-.59-1.06.2-.3.79-.8 1.48-1.12 1.78-.32.3-1.0.48-1.8.19-.8-.29-3.4-1.29-4.83-3.64-.34-.58-.3-1.16.27-1.89.54-.69 1.04-1.29 1.56-1.99.31-.41.22-.76-.05-1.25-.27-.49-2.4-5.78-2.6-6.49-.2-.71-.05-.75-.6-.76-.55-.02-1.2-.02-1.63-.02-.43 0-.75.22-1.02.5-.28.27-.92.93-.92 2.26 0 1.33 1.02 2.6 1.15 2.82.13.22 2.02 3.2 4.89 4.82 2.88 1.62 2.88 1.09.32 1.57zm.92-.81c-.13-.07-.46-.22-.58-.29-.12-.07-.26-.1-.13-.02.13.08.7.83.79.93.09.1.18.15.31.07.12-.08.5-.2.58-.25.08-.06.25-.19.34-.3.09-.12.39-.99.28-1.12-.11-.13-.26-.11-.4-.18-.14-.07-.29-.12-.44-.04zm-1.14.71c.22-.11-.13.34-.3.43-.17.09-.34.13-.5.06-.17-.07-.2-.07-.12-.02.08.05.65.65.65.92-.0.27.13.39.2.46.07.07.1.09.16.02.06-.07.2-.26.27-.4.07-.14.2-.33.27-.47.07-.14.04-.26-.06-.44z"
+                    fill="white"
+                  />
+                </svg>
+                WhatsApp us
+              </a>
+              <a
+                href="tel:+919947800100"
+                class="bg-gray-700 text-white font-bold py-3 px-6 rounded-full inline-flex items-center mt-2 hover:bg-gray-800 transition-colors w-full sm:w-auto justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 18.25c-.24 0-.46-.07-.65-.21l-3.32-2.34c-.4-.28-.61-.75-.55-1.23.06-.48.33-.92.74-1.15l1.64-.95c.29-.17.45-.5.45-.85V9.45c0-.36-.16-.69-.45-.86l-1.64-.94c-.4-.23-.67-.67-.74-1.15-.06-.48.15-.95.55-1.23l3.32-2.34c.19-.14.41-.21.65-.21h1.5A.75.75 0 0 1 22 3.1c0 .41-.34.75-.75.75h-1.5c-.5 0-.91.38-1.07.87l-3.32 2.34c-.4.28-.61.75-.55 1.23.06.48.33.92.74 1.15l1.64.95c.29.17.45.5.45.85V9.45c0 .36-.16.69-.45.86l-1.64.94c-.4.23-.67.67-.74 1.15-.06.48.15.95.55 1.23l3.32 2.34c.19.14.41.21.65.21h1.5A.75.75 0 0 1 22 18.25c0 .41-.34.75-.75.75h-1.5zm-8.49-11.23c-1.39-1.39-2.09-3.21-2.09-5.18h-1.5c-2.3 0-4.47.89-6.12 2.54s-2.54 3.82-2.54 6.12v1.5c0 2.3.89 4.47 2.54 6.12s3.82 2.54 6.12 2.54h1.5c1.97 0 3.79-.7 5.18-2.09l1.62-1.62-1.06-1.06-1.62 1.62c-1.11 1.11-2.6 1.71-4.18 1.71h-1.5c-1.58 0-3.07-.6-4.18-1.71s-1.71-2.6-1.71-4.18v-1.5c0-1.58.6-3.07 1.71-4.18l1.62-1.62z"
+                  />
+                </svg>
+                Call us
+              </a>
+            </div>
+            <p class="text-sm font-semibold mt-2">
+              WhatsApp/Call: **+91 99478 00100**
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Data Collection Section -->
+      <div
+        id="data-collection-section"
+        class="hidden transition-opacity duration-500"
+      >
+        <div
+          class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white text-center p-6 rounded-t-2xl shadow-lg"
+        >
+          <h2 class="text-2xl font-bold prominent-heading">
+            Your Future Awaits
+          </h2>
+          <p class="text-sm mt-1">
+            Just a few details to get started on your career path.
+          </p>
+        </div>
+        <form
+          id="user-data-form"
+          class="space-y-6 p-6"
+          action="https://docs.google.com/forms/d/e/1FAIpQLSf9V4YhlKKiH8SVT74xhIvCZCL_e0sZMr4C52-wQ22PR7nnPg/formResponse"
+          target="hidden_iframe"
+          method="POST"
+        >
+          <div>
+            <label
+              for="student-name"
+              class="block text-sm font-semibold text-gray-700 mb-1"
+              >Student Name</label
+            >
+            <input
+              type="text"
+              id="student-name"
+              name="entry.671621715"
+              required
+              class="w-full rounded-lg border-2 border-gray-300 p-3 focus:border-indigo-500 focus:ring-indigo-500 transition-all duration-200"
+            />
+          </div>
+          <div>
+            <label
+              for="mobile-number"
+              class="block text-sm font-semibold text-gray-700 mb-1"
+              >Mobile Number</label
+            >
+            <div class="flex">
+              <select
+                id="country-code"
+                class="rounded-l-lg border-2 border-gray-300 bg-gray-100 text-gray-700 text-sm p-3 focus:outline-none transition-all duration-200"
+              >
+                <option value="+91" selected>+91</option>
+                <option value="+971">+971</option>
+                <option value="+966">+966</option>
+                <option value="+965">+965</option>
+                <option value="+974">+974</option>
+                <option value="+973">+973</option>
+                <option value="+968">+968</option>
+              </select>
+              <input
+                type="tel"
+                id="mobile-number"
+                required
+                class="w-full rounded-r-lg border-2 border-gray-300 p-3 text-lg focus:border-indigo-500 focus:ring-indigo-500 transition-all duration-200"
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              for="guardian-number"
+              class="block text-sm font-semibold text-gray-700 mb-1"
+              >Guardian's Number</label
+            >
+            <input
+              type="tel"
+              id="guardian-number"
+              class="w-full rounded-lg border-2 border-gray-300 p-3 focus:border-indigo-500 focus:ring-indigo-500 transition-all duration-200"
+            />
+          </div>
+          <div>
+            <input type="hidden" id="MobileFull" name="entry.2066303681" />
+            <input type="hidden" id="GuardianFull" name="entry.1875840156" />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+          >
+            Start Test
+          </button>
+        </form>
+
+        <iframe name="hidden_iframe" style="display: none"></iframe>
+      </div>
+
+      <!-- Aptitude Test Section -->
+      <div
+        id="test-section"
+        class="hidden transition-opacity duration-500 flex-grow flex flex-col justify-between"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h2
+            class="text-xl md:text-2xl font-bold text-gray-800 prominent-heading"
+          >
+            Qmentr Aptitude Test
+          </h2>
+          <button
+            id="language-toggle"
+            class="text-sm text-indigo-600 font-semibold px-4 py-2 rounded-full border border-indigo-200 hover:bg-indigo-50"
+          >
+            മലയാളത്തിലേക്ക് മാറ്റുക
+          </button>
+        </div>
+
+        <!-- Time Remaining & Progress Bar -->
+        <div class="mb-6 flex flex-col items-center">
+          <div
+            class="w-full flex justify-between items-center text-gray-500 text-sm mb-2"
+          >
+            <span id="question-count">Question 1 of 60</span>
+            <span id="timer">⏳ 8:00</span>
+          </div>
+          <div class="progress-bar-container w-full">
+            <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Encouraging Message Container -->
+        <div id="encouraging-message-container" class="h-8 mb-4"></div>
+
+        <!-- Question and Options -->
+        <div
+          class="bg-gray-50 rounded-xl p-6 mb-6 shadow-sm flex-grow flex flex-col justify-center"
+        >
+          <p
+            id="question-text"
+            class="text-lg md:text-xl text-center text-gray-800 font-medium"
+          ></p>
+        </div>
+
+        <div id="options-container" class="space-y-4">
+          <button
+            id="option-a"
+            class="option-button w-full text-left p-4 rounded-xl border-2 border-gray-200 bg-white font-medium text-gray-700 hover:border-indigo-400 transition-all duration-300"
+          ></button>
+          <button
+            id="option-b"
+            class="option-button w-full text-left p-4 rounded-xl border-2 border-gray-200 bg-white font-medium text-gray-700 hover:border-indigo-400 transition-all duration-300"
+          ></button>
+        </div>
+
+        <div class="mt-8 text-center">
+          <button
+            id="go-back-button"
+            class="go-back-button hidden text-gray-500 font-semibold py-2 px-6 rounded-full border border-gray-300 hover:bg-gray-200 transition-all duration-300"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+
+      <!-- Report Section -->
+      <div
+        id="report-section"
+        class="hidden transition-opacity duration-500 report-section flex-grow flex flex-col justify-between"
+      >
+        <h2
+          class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6 prominent-heading"
+        >
+          Your Aptitude Report
+        </h2>
+
+        <div class="bg-indigo-100 p-6 rounded-2xl shadow-md mb-6 text-center">
+          <h3 class="text-lg text-indigo-600 mb-2 font-semibold">
+            Your Primary Career Path:
+          </h3>
+          <p
+            id="primary-result"
+            class="text-2xl md:text-3xl font-extrabold text-indigo-800 prominent-heading"
+          ></p>
+          <p
+            id="result-description"
+            class="mt-2 text-indigo-700 font-medium"
+          ></p>
+        </div>
+
+        <!-- Score Bar Chart -->
+        <div class="chart-container mb-8">
+          <canvas id="score-chart"></canvas>
+        </div>
+
+        <!-- Trait Analysis -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm mb-6 border-2 border-gray-200"
+        >
+          <h4 class="text-xl font-bold text-gray-800 mb-4 prominent-heading">
+            Detailed Trait Analysis
+          </h4>
+          <div id="trait-analysis-content">
+            <div class="mb-4">
+              <h5
+                class="text-lg font-semibold text-green-700 flex items-center mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 mr-2 text-green-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Key Strengths
+              </h5>
+              <ul
+                id="key-strengths"
+                class="list-disc list-inside text-gray-600 space-y-1"
+              ></ul>
+            </div>
+            <div>
+              <h5
+                class="text-lg font-semibold text-red-700 flex items-center mb-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6 mr-2 text-red-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Areas to Work On
+              </h5>
+              <ul
+                id="areas-to-work-on"
+                class="list-disc list-inside text-gray-600 space-y-1"
+              ></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other Career Paths -->
+        <div
+          class="bg-white p-6 rounded-2xl shadow-sm mb-6 border-2 border-gray-200"
+        >
+          <h4 class="text-xl font-bold text-gray-800 mb-4 prominent-heading">
+            Other Career Paths
+          </h4>
+          <div id="other-paths-content" class="text-gray-700 space-y-4"></div>
+        </div>
+
+        <!-- Promotion Section -->
+        <div
+          class="mt-8 text-center p-6 bg-yellow-50 rounded-xl border-l-4 border-yellow-400"
+        >
+          <h3 class="text-xl font-bold text-gray-800 mb-2 prominent-heading">
+            Ready for a Detailed Assessment?
+          </h3>
+          <p class="text-sm text-gray-600 mb-4">
+            This aptitude test is only the first step. For a comprehensive
+            analysis of your skills, interests, and professional goals, we
+            highly recommend our 1-on-1 counseling session with our expert
+            mentors.
+          </p>
+          <a
+            href="https://wa.me/919947800100?text=I%20want%20to%20Conncet%20with%20my%20Qmentr"
+            class="inline-flex items-center bg-green-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition-transform transform hover:scale-105"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8L22 22l-7.2-2.7a9.9 9.9 0 0 1-5.8 1.4C5.45 20.7 2 17.5 2 13s3.45-7.7 7.7-7.7c2.25 0 4.3 1 5.8 2.7l.9 3.8h.9a.5.5 0 0 1 0 1h-2.1l-.8 3.3a.5.5 0 0 1-.5.4c-1.3 0-2.5-.5-3.6-1.4a8.38 8.38 0 0 1-1.4-3.8c0-4.5 3.45-7.7 7.7-7.7 2.25 0 4.3 1 5.8 2.7l.9 3.8h.9z"
+                fill="white"
+              />
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.86 0 3.63-.52 5.2-1.44l3.8 1.4L18.6 17.8c2.4-3 3.6-6.7 3.4-10.4C22 6.48 17.52 2 12 2zm3.3 10.3c-.45.45-1.04.67-1.68.67-.64 0-1.23-.22-1.68-.67-.45-.45-.67-1.04-.67-1.68s.22-1.23.67-1.68c.45-.45 1.04-.67 1.68-.67.64 0 1.23.22 1.68.67.45.45.67 1.04.67 1.68s-.22 1.23-.67 1.68z"
+                fill="white"
+              />
+            </svg>
+            Connect with Qmentr
+          </a>
+        </div>
+
+        <!-- Share Button and Contact Info on Report Page -->
+        <div class="mt-8 text-center">
+          <button
+            id="share-report-button"
+            class="bg-purple-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-purple-700 transition-transform transform hover:scale-105"
+          >
+            Share Report
+          </button>
+          <div
+            id="share-message"
+            class="mt-4 text-green-600 font-semibold hidden"
+          >
+            Report copied to your clipboard!
+          </div>
+          <button
+            id="download-pdf-button"
+            class="mt-4 bg-gray-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-700 transition-transform transform hover:scale-105"
+          >
+            Download PDF
+          </button>
+          <div class="mt-4 text-center">
+            <a
+              href="https://wa.me/919947800100?text=I%20want%20to%20Conncet%20with%20my%20Qmentr"
+              class="text-sm font-semibold text-green-600 hover:underline"
+            >
+              Contact on WhatsApp: +91 99478 00100
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
